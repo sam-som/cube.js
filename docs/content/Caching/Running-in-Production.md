@@ -191,9 +191,8 @@ services:
     environment:
       - CUBESTORE_GCS_BUCKET=<BUCKET_NAME_IN_GCS>
       - CUBESTORE_GCS_SUB_PATH=/
-      - CUBESTORE_AWS_ACCESS_KEY_ID=<AWS_ACCESS_KEY_ID>
-      - CUBESTORE_AWS_SECRET_ACCESS_KEY=<AWS_SECRET_ACCESS_KEY>
       - CUBESTORE_REMOTE_DIR=/cube/data
+      - SERVICE_ACCOUNT_JSON=<GOOGLE_CLOUD_JSON_CREDENTIALS>
     volumes:
       - .cubestore:/cube/data
   cube:
