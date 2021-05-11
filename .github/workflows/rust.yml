@@ -96,6 +96,7 @@ jobs:
           - x86_64-unknown-linux-gnu
           - x86_64-unknown-linux-musl
           - x86_64-pc-windows-gnu
+          - x86_64-pc-windows-msvc
           - x86_64-apple-darwin
         include:
           - os: ubuntu-latest
@@ -116,6 +117,13 @@ jobs:
             executable_name: cubestored.exe
             cross: true
             strip: true
+            # cubestored.exe: CantPackException: superfluous data between sections
+            compress: false
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            executable_name: cubestored.exe
+            cross: false
+            strip: false
             # cubestored.exe: CantPackException: superfluous data between sections
             compress: false
           - os: macos-latest
@@ -142,11 +150,20 @@ jobs:
       - run: source .github/actions/${{ matrix.before_script }}.sh
         if: ${{ matrix.before_script }}
         shell: bash
-      #- name: Install dependencies Windows
-      #  run: vcpkg integrate install; vcpkg install openssl:x64-windows
-      #  if: matrix.os == 'windows-latest'
-      #  env:
-      #    VCPKG_ROOT: 'C:\vcpkg'
+      - name: Add VCPKG_ROOT to Windows PATH
+        run: echo "VCPKG_ROOT=$env:VCPKG_INSTALLATION_ROOT" | Out-File -FilePath $env:GITHUB_ENV -Append
+        if: matrix.os == 'windows-latest'
+      - name: Install dependencies Windows
+        run: vcpkg integrate install; vcpkg install openssl:x64-windows
+        if: matrix.os == 'windows-latest'
+        env:
+          VCPKG_ROOT: "C:\vcpkg"
+      - name: Set Env Variables for Windows
+        uses: allenevans/set-env@v2.0.0
+        if: ${{ matrix.target == 'windows-latest' }}
+        with:
+          RUSTFLAGS: "-Ctarget-feature=+crt-static"
+          OPENSSL_STATIC: "true"
       - name: Set Env Variables for Darwin
         uses: allenevans/set-env@v2.0.0
         if: ${{ matrix.target == 'x86_64-apple-darwin' }}
