@@ -1,11 +1,11 @@
 {
-  "name": "@cubejs-backend/snowflake-driver",
+  "name": "@sam-som/cubejs-snowflake-driver",
   "description": "Cube.js Snowflake database driver",
-  "author": "Cube Dev, Inc.",
-  "version": "0.27.5",
+  "author": "Sam Som",
+  "version": "0.1.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/cube-js/cube.js.git",
+    "url": "https://github.com/sam-som/cube.js.git",
     "directory": "packages/cubejs-snowflake-driver"
   },
   "engines": {
